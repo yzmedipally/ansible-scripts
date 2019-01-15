@@ -1,0 +1,37 @@
+- hosts: dev
+  become: true
+  vars:
+    - port: 60
+  tasks:
+    - name: install apache
+      yum:
+        name: 'httpd'
+        state: 'installed'
+    
+    - name: List Users and Groups
+      shell: |
+          echo "No of users in this system:" $(ls /home | wc -l)
+          echo "The Users are " $(ls /home)
+      register: result
+
+    - name: copying the configuration file
+      template:
+        src: "httpd.conf.j2"
+        dest: "/etc/httpd/conf/httpd.conf"
+      notify: restarts
+     
+    - name: Adding index content
+      copy:
+        content: "{{ result.stdout }}"
+        dest: "/var/www/html/index.html"      
+
+    - name:  start apache
+      service:
+        name: 'httpd'
+        state: 'started'
+
+  handlers:
+    - name: restarts
+      service: 
+        name: 'httpd'
+        state: 'restarted'

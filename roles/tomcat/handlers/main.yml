@@ -1,0 +1,15 @@
+---
+# handlers file for tomcat
+
+- name: restart
+  service: 
+    name: "httpd"
+    state: "restarted"
+
+- name: restart1
+  service: 
+    name: "apache2"
+    state: "restarted"
+
+
+

@@ -1,0 +1,12 @@
+---
+# tasks file for maven
+
+- name: Install package Maven using generic package manager
+  package:
+    name: "{{maven_pkg}}"
+    state: present
+
+- name: Create a maven.sh file in profiles.d folder to set Path
+  template:
+    src: maven.sh.j2
+    dest: /etc/profile.d/maven.sh

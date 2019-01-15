@@ -1,0 +1,9 @@
+---
+# vars file for maven
+maven_repo: http://apache.spinellicreations.com/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.zip
+maven_version: "3.6.0"
+maven_pkg: maven
+#maven_pkg: apache-maven-{{maven_version}}-bin.zip
+maven_home: /usr/local/src/apache-maven-{{maven_version}}
+
+

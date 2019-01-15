@@ -1,0 +1,81 @@
+---
+# tasks file for tomcat
+- name: This is for RedHat
+  block:  
+   - name: setting up variable
+     set_fact:
+       serv: "httpd"
+      
+   - name: installing packages for apache for centos
+     yum:
+       name: "{{ pack }}" 
+       state: installed
+
+   - name: List Users and Groups
+     shell: |
+          echo "No of users in this system:" $(ls /home | wc -l)
+          echo "The Users are " $(ls /home)
+     register: result
+
+   
+   - name: template configuration
+     template:
+       src: "httpd.conf.j2"
+       dest: "/etc/httpd/conf/httpd.conf"
+     notify: restart
+
+   - name: Adding index content
+     copy:
+       content: "{{ result.stdout }}"
+       dest: "/var/www/html/index.html"
+ 
+   - name: starting the service
+     service:
+       name: "{{ serv }}" 
+       state: "started"
+   
+   - name: starting the ubantu
+     service:
+       name: "{{serv}}"
+       state: "restarted"
+  when: (ansible_os_family == "RedHat")
+
+- name: This is for Ubantu
+  block:  
+   - name: setting up variable
+     set_fact:
+       serv1: "apache2"
+      
+   - name: installing packages for apache for ubantu
+     apt:
+       name: "apache2"
+       state: 'latest'
+
+   - name: List Users and Groups
+     shell: |
+          echo "No of users in this system:" $(ls /home | wc -l)
+          echo "The Users are " $(ls /home)
+     register: result
+
+   - name: template configuration
+     template:
+       src: "ports.conf.j2"
+       dest: "/etc/apache2/ports.conf"
+     notify: restart1
+
+   - name: Adding index content
+     copy:
+       content: "{{ result.stdout }}"
+       dest: "/var/www/html/index.html" 
+   - name: starting the service
+     service:
+       name: "{{ serv1 }}" 
+       state: "started"
+   
+   - name: starting the ubantu
+     service:
+       name: "{{serv1}}"
+       state: "restarted"
+  when: (ansible_os_family == "Debian")
+
+

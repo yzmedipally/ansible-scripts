@@ -1,0 +1,35 @@
+- hosts: localhost
+  become: true
+  
+  tasks:
+  - name: checking ACL
+    acl:
+      path: /tmp/test.txt
+      entity: yzmedipally
+      etype: user
+      permissions: rw
+      state: present
+
+  - name: compress directory
+    archive:
+      path: /tmp/test1
+      dest: /tmp/test1/test.tbz
+
+  - name: create a zip file
+    archive:
+      path: /tmp/test1/test.txt
+      format: zip
+
+  - name: insert/update file
+    blockinfile:
+      path: /tmp/test1/test.txt
+      block: |
+        inserting this line
+        testing124.com
+
+  - name: copying the files
+    copy:
+      src: /etc/ansible/playbook.yml 
+      dest: /tmp/test1/playbook.yml
+      owner: yzmedipally
+      mode: 0777

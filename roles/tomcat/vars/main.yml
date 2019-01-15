@@ -1,0 +1,6 @@
+---
+# vars file for tomcat
+port: '60'
+pack: ['httpd', 'httpd-tools']
+
+
